@@ -1,23 +1,36 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import InputForm from './components/InputForm';
+import Navbar from './components/Navbar'
+import Orders from './components/Orders';
 
 function App() {
+  const [orders, setOrders] = useState([{
+    uniqueOrderID: 1,
+    price: 1,
+    dish: 'Fries',
+    table: 1
+  },
+  {
+    uniqueOrderID: 2,
+    price: 1,
+    dish: 'Fries',
+    table: 2
+  }, {
+    uniqueOrderID: 3,
+    price: 1,
+    dish: 'Fries',
+    table: 3
+  }])
+
+  const addOrder = (newOrder) => {
+    setOrders([...orders, newOrder]);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <InputForm addOrder={addOrder} />
+      <Orders orders={orders} />
     </div>
   );
 }
