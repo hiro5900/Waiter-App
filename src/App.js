@@ -1,36 +1,38 @@
-import React, { useState } from 'react';
-import './App.css';
-import InputForm from './components/InputForm';
-import Navbar from './components/Navbar'
-import Orders from './components/Orders';
+import React, { useState, useEffect } from "react";
+import InputForm from "./components/InputForm";
+import Navbar from "./components/Navbar";
+import Orders from "./components/Orders";
 
 function App() {
-  const [orders, setOrders] = useState([{
-    uniqueOrderID: 1,
-    price: 1,
-    dish: 'Fries',
-    table: 1
-  },
-  {
-    uniqueOrderID: 2,
-    price: 1,
-    dish: 'Fries',
-    table: 2
-  }, {
-    uniqueOrderID: 3,
-    price: 1,
-    dish: 'Fries',
-    table: 3
-  }])
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    try {
+      // localStorage.removeItem("order");
+      const item = localStorage.getItem("order");
+      if (item) {
+        setOrders(JSON.parse(item));
+      }
+    } catch (error) {
+      console.error("Error parsing item from localStorage:", error);
+    }
+  }, []);
 
   const addOrder = (newOrder) => {
     setOrders([...orders, newOrder]);
   };
+
+  const handleDelete = (id) => {
+    const newOrders = orders.filter((order) => order.uniqueOrderID !== id);
+    setOrders(newOrders);
+    localStorage.setItem("order", JSON.stringify(newOrders));
+  };
+
   return (
     <div className="App">
       <Navbar />
       <InputForm addOrder={addOrder} />
-      <Orders orders={orders} />
+      <Orders orders={orders} onDelete={handleDelete} />
     </div>
   );
 }
